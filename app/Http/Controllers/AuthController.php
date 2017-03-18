@@ -20,15 +20,51 @@ class AuthController extends Controller
         $this->jwt = $jwt;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\POST(
+     *   path="/auth/login",
+     *   summary="Login",
+     *   produces={"application/json"},
+     *     @SWG\Parameter(
+     *     in="formData",
+     *     type="string",
+     *     name="email",
+     *     required=true,
+     *     @SWG\Schema(ref="#/definitions/User")
+     *   ),
+     *     @SWG\Parameter(
+     *     in="formData",
+     *     type="string",
+     *     name="password",
+     *     required=true,
+     *     @SWG\Schema(ref="#/definitions/User")
+     *   ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="Returns a JWT token for authorization"
+     *   ),
+     *   @SWG\Response(
+     *     response=404,
+     *     description="Not found User"
+     *   ),
+     *   @SWG\Response(
+     *     response=0,
+     *     description="JWT Token exceptions"
+     *   )
+     * )
+     */
     public function loginPost(Request $request)
     {
         $this->validate($request, [
-            'email'    => 'required|email|max:255',
+            'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
 
         try {
-            if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
+            if (!$token = $this->jwt->attempt($request->only('email', 'password'))) {
                 return response()->json(['user_not_found'], 404);
             }
         } catch (TokenExpiredException $e) {
