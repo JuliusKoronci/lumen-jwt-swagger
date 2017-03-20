@@ -48,11 +48,11 @@ class AuthController extends Controller
      *   ),
      *   @SWG\Response(
      *     response=404,
-     *     description="Not found User"
+     *     description="Not found User, Invalid password"
      *   ),
      *   @SWG\Response(
-     *     response=0,
-     *     description="JWT Token exceptions"
+     *     response=422,
+     *     description="Validation of formData failed"
      *   )
      * )
      */
